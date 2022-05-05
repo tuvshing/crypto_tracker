@@ -16,15 +16,47 @@ const darkMode = createTheme({
       type: 'dark',
     },
   })
-const useStyles = makeStyles(() => ({}))
+const useStyles = makeStyles(() => ({
+    row: {
+        backgroundColor: "#282a36",
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor:'#44475a'
+        },
+        fontFamily: 'Open Sans',
+    }
+
+
+}))
+
+function numberWithCommas(x){
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+function currencyRounder (labelValue) {
+    const temp = Math.abs(Number(labelValue))
+    //Billion
+    return temp >= 1.0e+9
+    ? (temp / 1.0e+9).toFixed(2) + "B"
+    //Million
+    : temp >= 1.0e+6
+    ? (temp / 1.0e+6).toFixed(2) + "M"
+    //Thousand
+    : temp >= 1.0e+3
+    ? (temp / 1.0e+3).toFixed(2) + "K"
+    : temp;
+}
+
 
 const CoinList = () => {
     const [cryptos, setCryptos] = useState([])
     const [load, setLoad] = useState(false)
-    const {curr} = CryptoState()
-    const [search, setSearch] = useState()
+    const {curr, symbol} = CryptoState()
+    const [search, setSearch] = useState('')
     const navigate = useNavigate()
     const classes = useStyles()
+
+    // Fetch crypto data from api
     const fetch = async () => {
         setLoad(true)
         const {data} = await axios.get(CryptoList(curr))
@@ -32,14 +64,13 @@ const CoinList = () => {
         setLoad(false)
     }
 
-    console.log(cryptos)
     useEffect(() => {
         fetch()
     }, [curr])
 
+    // Search bar handler
     const handleSearch = () => {
         return cryptos.filter((c) => (
-
             c.name.toLowerCase().includes(search) ||
             c.symbol.toLowerCase().includes(search)
         ))
@@ -53,32 +84,36 @@ const CoinList = () => {
       <Container style = {{textAlign: 'center'}}>
         <Typography
             variant = 'h4'
-            style={{margin:18, fontFamily:'Open Sans'}}>
+            style={{color: '#bd93f9', margin:18, fontFamily:'Open Sans'}}>
             Cryptocurrency by Market Cap
         </Typography>
         <TextField 
-            label='Search for a crypto currency..'
-            variant='outlined'
-            style={{marginBottom:20, width:'100%'}}  
+            style={{
+            backgroundColor: "#282a36",
+            marginBottom:20, 
+            width:'100%'}}
+            sx={{borderColor: 'white', 
+                input:{color: '#bd93f9'}}}
+            InputLabelProps={{style: { color: 'white' }}}
+            label='Search for a crypto currency...'
+            variant='outlined' 
             onChange={(c) => setSearch(c.target.value)}
         />
-
-
         <TableContainer>
             {load? (<LinearProgress style ={{backgroundColor: '#bd93f9'}}></LinearProgress>) : 
                 (<Table>
-                    <TableHead style ={{backgroundColor: '#bd93f9'}} >
+                    <TableHead style ={{backgroundColor: '#44475a'}}>
                         <TableRow>
                             {['Coin', 'Price', '24h Change', 'Market Cap'].map((head) =>(
                                 <TableCell style = {{
-                                    color: 'black',
+                                    color: '#bd93f9',
                                     fontWeight: '700',
                                     fontFamily: 'Open Sans'
                                 }}
                                 key={head}
                                 align={head === 'Coin' ? '': 'right'}
                                 >
-                                    {head}
+                                {head}
                                 </TableCell>
                             ))
                             }
@@ -86,7 +121,7 @@ const CoinList = () => {
                     </TableHead>
                     <TableBody>
                         {handleSearch().map((row) => {
-                            const p = row.price_chaneg_percentage_24h > 0
+                            const p = row.price_change_percentage_24h > 0
                             return (
                                 <TableRow 
                                 onClick={() => navigate('/coins/${row.id}')}
@@ -106,15 +141,35 @@ const CoinList = () => {
                                     style={{marginBottom: -2, marginRight: 6}}
                                     />
                                     {/* <div style={{display:'flex', flexDirection: 'column'}}> */}
-                                        <span style ={{color:'white',textTransform: 'uppercase', fontSize: 22,  marginRight: 10}}>
+                                        <span style ={{color:'white',textTransform: 'uppercase', fontSize: 20,  marginRight: 10}}>
                                         {row.symbol}
                                         </span>
                                         <span style ={{color:'darkgray'}}>
-                                            {row.name}
+                                        {row.name}
                                         </span>
                                     {/* </div> */}
                                     </TableCell>
-
+                                    <TableCell align = 'right'
+                                    style ={{color:'white',
+                                    fontWeight: 700,}}>
+                                    {symbol}{'$'}
+                                    {numberWithCommas(row.current_price.toFixed(2))}
+                                    </TableCell>
+                                    <TableCell align = 'right'
+                                    // determine if change is + or -
+                                    style ={{
+                                        color: p > 0 ? '#74F471' : '#F47174',
+                                        fontWeight: 700,
+                                        }}>
+                                    {p && '+'}
+                                    {row.price_change_percentage_24h.toFixed(2)}%
+                                    </TableCell>
+                                    <TableCell align = 'right'
+                                    style ={{color: 'white',
+                                    fontWeight: 700,}}>
+                                    {symbol}{"$"}
+                                    {currencyRounder((row.market_cap))}
+                                    </TableCell>
                                 </TableRow>
                             )
                         })}
@@ -122,11 +177,9 @@ const CoinList = () => {
                         
                     </TableBody>
 
-                </Table>
-                )
+                </Table>)
             }
         </TableContainer>
-
       </Container>
   </ThemeProvider>
 }
