@@ -1,7 +1,7 @@
 import { makeStyles } from "@mui/styles";
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import './App.css';
-import Coinpage from "./components/Coinpage";
+import CoinPage from "./components/CoinPage";
 import Header from "./components/Header";
 import Homepage from "./pages/Homepage"
 
@@ -21,7 +21,7 @@ function App() {
         <Header />
         <Routes>  
           <Route path='/' element={<Homepage/>} exact />
-          <Route path='/coins/:id' element={<Coinpage />} />
+          <Route path='/coins/:id' element={<CoinPage />} />
         </Routes>
       </div>
     </BrowserRouter>

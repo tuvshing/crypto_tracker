@@ -1,6 +1,6 @@
 import { AppBar, Container, MenuItem, Toolbar, Typography, Select } from '@mui/material';
 import { makeStyles, ThemeProvider } from '@mui/styles';
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import React from 'react'
 import { createTheme } from '@mui/material/styles';
 import { CryptoState } from '../CoinContext';
@@ -29,7 +29,6 @@ const Header = () => {
   const classes = useStyles()
   const navigate = useNavigate()
   const {curr, setCurr } = CryptoState()
-  console.log(curr)
   return (
     <ThemeProvider theme={darkMode}>
     <AppBar color = 'transparent' position='static'>
