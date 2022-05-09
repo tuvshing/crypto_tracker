@@ -5,8 +5,9 @@ import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { CryptoByID, HistoricalChart } from '../apiconf/api'
 import { CryptoState } from '../CoinContext'
-import { chartDays } from "../apiconf/data";
-import SelectButton from './SelectButton'
+import { chartDays } from "../apiconf/days";
+import DayButton from './DayButton'
+
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -28,6 +29,8 @@ import {
     Legend
     );
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
+
+
 const ChartInfo = ({coin}) => {
     const [hist, setHist] = useState()
     const [days, setDays] = useState(30)
@@ -43,7 +46,6 @@ const ChartInfo = ({coin}) => {
         setHist(data.prices);
     };
 
-    console.log(hist)
     useEffect(() => {
     fetchHistoricData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +64,7 @@ const ChartInfo = ({coin}) => {
         <div>
         {
         !hist | flag === false ? (
-            <CircularProgress style ={{color: 'gold', margin:'200px'}}
+            <CircularProgress style ={{color: '#bd93f9'}}
             size={250}
             thickness={1}
             />
@@ -84,15 +86,13 @@ const ChartInfo = ({coin}) => {
                             data: hist.map((crypto) => crypto[1]),
                             label: `Price of ${capitalize(coin)} in ${curr} ( Past ${days} Days) `,
                             borderColor: '#bd93f9',
-
                         }]
                 }}
                 options={{
                     elements: {
                     point: {
                         radius: 1,
-                    },
-                    },
+                    }},
                     scales: {
                         x: {
                             grid: {
@@ -119,7 +119,20 @@ const ChartInfo = ({coin}) => {
                     },
                 }}
                 />
-
+                <div style={{display:'flex', marginTop:20, justifyContent:'space-around', width:'100%'}}>
+                    {chartDays.map((day) => (
+                        <DayButton
+                        key={day.value}
+                        onClick={() => {
+                            setDays(day.value)
+                            setflag(true)
+                            }}
+                        selected = {day.value === days}
+                        >
+                        {day.label}
+                        </DayButton>
+                    ))}
+                </div>
             </>
             )}
              </div>

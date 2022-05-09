@@ -223,7 +223,7 @@ const CoinList = () => {
             </Container>
             
             
-            <Container style={{margin:'60pt 15px', backgroundColor:'#282a36', borderRadius:15, maxHeight:380}}>
+            <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'100%', height:'100%',}}>
                 <ChartInfo coin={coin}/>
             </Container>
             </Grid>
