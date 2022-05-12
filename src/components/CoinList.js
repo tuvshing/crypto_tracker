@@ -7,8 +7,6 @@ import { Container, tableCellClasses, LinearProgress, Pagination, Table, TableBo
 import { useNavigate } from 'react-router-dom'
 import { ThemeProvider } from '@mui/styles';
 import ChartInfo from './ChartInfo'
-import { setSelectionRange } from '@testing-library/user-event/dist/utils'
-
 
 
 const darkMode = createTheme({
@@ -19,24 +17,6 @@ const darkMode = createTheme({
       type: 'dark'
     }
   })
-// const useStyles = makeStyles(() => ({
-//     row: {
-//         backgroundColor: "#282a36",
-//         cursor: 'pointer',
-//         '&:hover': {
-//             backgroundColor:'#44475a'
-//         },
-//         fontFamily: 'Open Sans',
-//     },
-//     ul: {
-//         "& .MuiPaginationItem-root": {
-//           color: "#bd93f9",
-//           '&.Mui-selected': {
-//             background: '#44475a',
-//           },
-//         },
-//       }
-// }))
 
 const numberWithCommas = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 

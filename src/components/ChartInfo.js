@@ -34,21 +34,17 @@ const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 const ChartInfo = ({coin}) => {
     const [hist, setHist] = useState()
     const [days, setDays] = useState(30)
-
+    const [flag,setflag] = useState(false);    
     const {curr} = CryptoState()
 
-    const [flag,setflag] = useState(false);
-    // console.log(crypto.id)
-
-    const fetchHistoricData = async () => {
-        const { data } = await axios.get(HistoricalChart(coin, days, curr.toLowerCase()));
-        setflag(true);
-        setHist(data.prices);
-    };
 
     useEffect(() => {
+        const fetchHistoricData = async () => {
+            const { data } = await axios.get(HistoricalChart(coin, days, curr.toLowerCase()));
+            setflag(true);
+            setHist(data.prices);
+        };
     fetchHistoricData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coin, curr, days]);
 
     const darkTheme = createTheme({
