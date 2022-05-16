@@ -3,13 +3,13 @@ import { ThemeProvider } from '@mui/styles'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
-import { CryptoByID, HistoricalChart } from '../apiconf/api'
+import { HistoricalChart } from '../apiconf/api'
 import { CryptoState } from '../CoinContext'
 import { chartDays } from "../apiconf/days";
 import DayButton from './DayButton'
 
 import {
-    Chart as ChartJS,
+    Chart,
     CategoryScale,
     LinearScale,
     PointElement,
@@ -18,8 +18,8 @@ import {
     Tooltip,
     Legend,
     } from 'chart.js';
-    
-    ChartJS.register(
+
+    Chart.register(
     CategoryScale,
     LinearScale,
     PointElement,
@@ -30,14 +30,11 @@ import {
     );
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
-
 const ChartInfo = ({coin}) => {
     const [hist, setHist] = useState()
     const [days, setDays] = useState(30)
     const [flag,setflag] = useState(false);    
     const {curr} = CryptoState()
-
-
     useEffect(() => {
         const fetchHistoricData = async () => {
             const { data } = await axios.get(HistoricalChart(coin, days, curr.toLowerCase()));
@@ -46,17 +43,8 @@ const ChartInfo = ({coin}) => {
         };
     fetchHistoricData();
     }, [coin, curr, days]);
-
-    const darkTheme = createTheme({
-        palette: {
-          primary: {
-            main: "#fff",
-          },
-          type: "dark",
-        },
-      });
-    
-    return ( <ThemeProvider theme={darkTheme}>
+    return ( 
+    // <ThemeProvider theme={darkTheme}>
         <div>
         {
         !hist | flag === false ? (
@@ -67,37 +55,52 @@ const ChartInfo = ({coin}) => {
         ) : (
             <>
             <Line
-            
+                id='line'
                 data={{labels:hist.map(crypto => {
                     let date = new Date(crypto[0]);
                     let time =
                     date.getHours() > 12
                       ? `${date.getHours() - 12}:${date.getMinutes()} PM`
                       : `${date.getHours()}:${date.getMinutes()} AM`;
-                  return days === 1 ? time : date.toLocaleDateString();
-                    
-                }),
+                    return days === 1 ? time : date.toLocaleDateString();
+                    }),
                     datasets: [
                         {
                             data: hist.map((crypto) => crypto[1]),
                             label: `Price of ${capitalize(coin)} in ${curr} ( Past ${days} Days) `,
-                            borderColor: '#bd93f9',
+                            // borderColor: '#bd93f9',
+                            backgroundColor: '#bd93f9',
+                            borderColor: 'rgba(118,106,192,1)',
+                            borderJoinStyle:'round',
+                            borderCapStyle:'round',
+                            borderWidth:3,
+                            pointRadius:0,
+                            pointHitRadius:10,
+                            lineTension:.2,
                         }]
                 }}
                 options={{
-                    elements: {
-                    point: {
-                        radius: 1,
-                    }},
+                    // elements: {
+                    // point: {
+                    //     radius: 1,
+                    // }},
                     scales: {
                         x: {
                             grid: {
-                            display: false
+                            display: false,
+                            },
+                            gridLines: {},
+                            ticks: {
+                            color: "white",
                             }
                         },
                         y: {
                             grid: {
-                            display: false
+                            display: false,
+                            },
+                            gridLines: {},
+                            ticks: {
+                            color: "white",
                             }
                         }
                     },
@@ -111,6 +114,9 @@ const ChartInfo = ({coin}) => {
                                 },
                                 padding:20
                             }
+                        },
+                        datalabels: {
+                            color: 'white'
                         },
                     },
                 }}
@@ -132,7 +138,7 @@ const ChartInfo = ({coin}) => {
             </>
             )}
              </div>
-    </ThemeProvider>
+    // </ThemeProvider>
     )
 
 }
