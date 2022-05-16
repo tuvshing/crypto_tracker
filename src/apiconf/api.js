@@ -4,6 +4,10 @@ export const CryptoList = (currency) =>
 export const CryptoByID = (id) =>
   `https://api.coingecko.com/api/v3/coins/${id}`;
 
+export const getGlobalData = (curr) =>
+  `https://api.coingecko.com/api/v3/global`;
+
+
 export const HistoricalChart = (id, days = 365, currency) =>
   `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
 

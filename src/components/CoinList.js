@@ -63,10 +63,13 @@ const CoinList = () => {
         ))
     }
 
+    const top20names = handleSearch().slice(0, 8).map((row) => (row.id))
+    const top20mcap = handleSearch().slice(0, 8).map((row) => (row.market_cap))
+
     return <ThemeProvider theme = {darkMode}>
-        <Grid container>
-            <Grid item xs={1}/>
-                <Grid item xs={10} ys={12} style={{ display: "flex", gap: "1rem" }}>
+        <Grid container >
+            <Grid item xs={6} >
+                {/* <Grid item xs={10} ys={12} style={{ display: "flex", gap: "1rem" }}> */}
                     <Container style = {{textAlign: 'center'}} >
                         <Typography
                             variant = 'h4'
@@ -201,14 +204,23 @@ const CoinList = () => {
 
                     </Container>
                     
-                    <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'100%', height:'100%',}}>
+                    {/* <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'100%', height:'100%',}}>
                         <ChartInfo coin={coin}/>
-                    </Container>
-                    <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'100%', height:'100%',}}>
+                    </Container> */}
+                    {/* <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'100%', height:'100%',}}>
                         <PieChart/> 
-                    </Container>
-                </Grid>
-            <Grid/>
+                    </Container> */}
+                {/* </Grid> */}
+            </Grid>
+
+            <Grid item xs={6}>
+            <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'100%', height:'100%',}}>
+                <ChartInfo coin={coin}/>
+            </Container>
+            <Container style={{margin:'60pt 0px', backgroundColor:'#282a36', borderRadius:15, maxHeight:590, width:'40%', height:'40%',}}>
+                    <PieChart topNames={top20names} topMcap={top20mcap}/> 
+            </Container>
+            </Grid>
         </Grid>
     </ThemeProvider>
 }
