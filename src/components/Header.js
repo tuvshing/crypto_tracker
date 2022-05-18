@@ -37,7 +37,7 @@ const Header = () => {
           <Typography 
           onClick={() => navigate('/')} 
           className={classes.title}
-          variant='h6'
+          variant='h6'  
           >
             Crypto Tracker
           </Typography>

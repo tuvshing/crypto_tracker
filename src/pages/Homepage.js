@@ -1,10 +1,12 @@
-import React from 'react'
-import CoinList from '../components/CoinList'
+import React from "react";
+import CoinList from "../components/CoinList";
 
 const Homepage = () => {
-  return <>
-    <CoinList/>
-  </>
-}
+  return (
+    <>
+      <CoinList />
+    </>
+  );
+};
 
-export default Homepage
+export default Homepage;
