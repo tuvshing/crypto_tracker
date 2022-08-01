@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { getGlobalData } from "../apiconf/api";
+import { getGlobalData } from "../config/api";
 import { CryptoState } from "../CoinContext";
 import axios from "axios";
 import {
@@ -73,7 +73,7 @@ const PieChart = ({ topNames, topMcap }) => {
   const marketCap = globalCap["data"]["total_market_cap"][curr.toLowerCase()];
   const sum = topMcap.reduce((psum, a) => psum + a, 0);
   const other = marketCap - sum;
-  console.log(marketCap);
+  // console.log(marketCap);
   const pieObjects = new Set(topNames);
   pieObjects.add("other");
   const pieMarketCaps = new Set(topMcap);
@@ -95,7 +95,7 @@ const PieChart = ({ topNames, topMcap }) => {
               labels: Array.from(pieObjects),
               datasets: [
                 {
-                  label: "Population (millions)",
+                  label: "Market Cap",
                   backgroundColor: [
                     "#f2a900",
                     "#8c8c8c",

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { CryptoList } from "../apiconf/api";
+import { CryptoList } from "../config/api";
 import { CryptoState } from "../CoinContext";
 import { createTheme } from "@mui/material/styles";
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
+import IconButton from '@mui/material/IconButton';
+
 import {
   Container,
   tableCellClasses,
@@ -21,6 +25,8 @@ import {
 import { ThemeProvider } from "@mui/styles";
 import ChartInfo from "./ChartInfo";
 import PieChart from "./PieChart";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const darkMode = createTheme({
   palette: {
@@ -52,12 +58,11 @@ function currencyRounder(labelValue) {
 const CoinList = () => {
   const [cryptos, setCryptos] = useState([]);
   const [load, setLoad] = useState(false);
-  const { curr, symbol } = CryptoState();
+  const { curr, symbol, user, watchlist, setAlert } = CryptoState();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-
   const [coin, setCoin] = useState("bitcoin");
-
+  const inWatchlist = watchlist.includes(coin)
   // Fetch crypto data from api
   useEffect(() => {
     const fetch = async () => {
@@ -84,6 +89,28 @@ const CoinList = () => {
   const top20mcap = handleSearch()
     .slice(0, 8)
     .map((row) => row.market_cap);
+  // console.log(coin)
+  const addToWatchlist = async () => {
+    const coinRef = doc(db, 'watchlist', user.uid)
+
+    try{
+      await setDoc(coinRef, {
+        coins: watchlist ? [...watchlist, coin] : [coin]
+      })
+      
+      setAlert({
+        open: true,
+        message: `${coin} added to the Watchlist!`,
+        type: 'success',
+      })
+    } catch(error) {
+      setAlert({
+        open: true,
+        message: error.message,
+        type: 'error',
+      })
+    }
+  }
 
   return (
     <ThemeProvider theme={darkMode}>
@@ -129,7 +156,7 @@ const CoinList = () => {
                 >
                   <TableHead style={{ backgroundColor: "#44475a" }}>
                     <TableRow>
-                      {["Coin", "Price", "24h Change", "Market Cap"].map(
+                      {["Coin", "Price", "24h Change", "Market Cap", "Watchlist"].map(
                         (head) => (
                           <TableCell
                             style={{
@@ -227,6 +254,18 @@ const CoinList = () => {
                               {symbol}
                               {"$"}
                               {currencyRounder(row.market_cap)}
+                            </TableCell>
+
+                            <TableCell
+                              align="right"
+                            >
+                              <IconButton 
+                                aria-label="watchlist" 
+                                sx={{color:'white'}} 
+                                onClick={addToWatchlist}>
+                                <StarOutlineIcon/>
+                                {/* {inWatchlist? <StarOutlinedIcon/> : <StarOutlineIcon/>} */}
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         );

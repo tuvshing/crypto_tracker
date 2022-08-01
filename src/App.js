@@ -1,6 +1,7 @@
 import { makeStyles } from "@mui/styles";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Alert from "./components/Alert";
 import Header from "./components/Header";
 import Homepage from "./pages/Homepage";
 
@@ -23,6 +24,7 @@ function App() {
           {/* <Route path='/coins/:id' element={< />} /> */}
         </Routes>
       </div>
+      <Alert/>
     </BrowserRouter>
   );
 }

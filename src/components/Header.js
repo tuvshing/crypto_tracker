@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import React from 'react'
 import { createTheme } from '@mui/material/styles';
 import { CryptoState } from '../CoinContext';
+import AuthModal from './Authentication/AuthModal';
+import UserSidebar from './Authentication/UserSidebar';
 
 
 const useStyles = makeStyles(() => ({
@@ -28,7 +30,7 @@ const darkMode = createTheme({
 const Header = () => {
   const classes = useStyles()
   const navigate = useNavigate()
-  const {curr, setCurr } = CryptoState()
+  const {curr, setCurr , user} = CryptoState()
   return (
     <ThemeProvider theme={darkMode}>
     <AppBar color = 'transparent' position='static'>
@@ -57,6 +59,8 @@ const Header = () => {
             <MenuItem value={'CAD'}>CAD</MenuItem>
 
           </Select>
+          
+          {user? <UserSidebar/>: <AuthModal/>}
         </Toolbar>
       </Container>  
     </AppBar>

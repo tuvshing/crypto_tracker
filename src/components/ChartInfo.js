@@ -2,9 +2,9 @@ import { CircularProgress, createTheme } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { HistoricalChart } from "../apiconf/api";
+import { HistoricalChart } from "../config/api";
 import { CryptoState } from "../CoinContext";
-import { chartDays } from "../apiconf/days";
+import { chartDays } from "../config/days";
 import DayButton from "./DayButton";
 
 import {
@@ -34,6 +34,7 @@ const ChartInfo = ({ coin }) => {
   const [days, setDays] = useState(30);
   const [flag, setflag] = useState(false);
   const { curr } = CryptoState();
+  // console.log(coin)
   useEffect(() => {
     const fetchHistoricData = async () => {
       const { data } = await axios.get(
